@@ -128,6 +128,8 @@ class TrainingArguments(transformers.Seq2SeqTrainingArguments):
     save_strategy: str = field(default='steps', metadata={"help": 'When to save checkpoints'})
     save_steps: int = field(default=250, metadata={"help": 'How often to save a model'})
     save_total_limit: int = field(default=40, metadata={"help": 'How many checkpoints to save before the oldest is overwritten'})
+    num_samples: int = field(default=512, metadata={"help": 'num_samples should be a positive integer value'})
+    group_by_length: bool = field(default=True, metadata={"help": 'Group sequences into batches with same length. Saves memory and speeds up training considerably.'})
 
 @dataclass
 class GenerationArguments:
@@ -454,7 +456,7 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
         else:
             print('Splitting train dataset in train and validation according to `eval_dataset_size`')
             dataset = dataset["train"].train_test_split(
-                test_size=args.eval_dataset_size, shuffle=True, seed=42
+                test_size=args.eval_dataset_size, seed=42
             )
             eval_dataset = dataset['test']
         if args.max_eval_samples is not None and len(eval_dataset) > args.max_eval_samples:
