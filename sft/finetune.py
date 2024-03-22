@@ -432,7 +432,7 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
         elif dataset_format == 'oassist1-ja' or (dataset_format is None and args.dataset == 'oassist1-ja'):
             dataset = dataset.map(lambda x: {
                 'input': '',
-                'output': x['text'],
+                'output': x['text_ja'],
             })
         elif dataset_format == 'input-output':
             # leave as is
