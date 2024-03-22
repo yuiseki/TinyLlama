@@ -390,6 +390,8 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
             return load_dataset("timdettmers/openassistant-guanaco")
         elif dataset_name == "OpenAssistant/oasst_top1_2023-08-25":
             return load_dataset("OpenAssistant/oasst_top1_2023-08-25")
+        elif dataset_name == "kunishou/oasst1-89k-ja":
+            return load_dataset("kunishou/oasst1-89k-ja")
         elif dataset_name == 'vicuna':
             raise NotImplementedError("Vicuna data was not released.")
         else:
@@ -423,6 +425,11 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
                 'output': x['chosen']
             })
         elif dataset_format == 'oasst1' or (dataset_format is None and args.dataset == 'oasst1'):
+            dataset = dataset.map(lambda x: {
+                'input': '',
+                'output': x['text'],
+            })
+        elif dataset_format == 'oassist1-ja' or (dataset_format is None and args.dataset == 'oassist1-ja'):
             dataset = dataset.map(lambda x: {
                 'input': '',
                 'output': x['text'],
